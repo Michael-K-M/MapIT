@@ -37,10 +37,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.PlacesOptions;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -53,7 +50,10 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -100,7 +100,6 @@ private ImageView mGps;
     private Boolean LocationPermision = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private PlaceAutocompleteAdapter  mPlaceAutocompleteAdapter;
     private GoogleApiClient mGoogleApiClient;
     private GeoDataClient geoDataClient;
 
@@ -109,12 +108,45 @@ private ImageView mGps;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
+        Places.initialize(getApplicationContext(), "AIzaSyDySPCwdauxqvmwHlTZ3DG9JMR6DCIB6gY");
+        //mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
         mGps = (ImageView) findViewById(R.id.ic_gps);
 
         getUserLocationPermision();
 
+//https://developers.google.com/places/android-sdk/autocomplete
+// Initialize the AutocompleteSupportFragment.
+        final AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
+// Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(com.google.android.libraries.places.api.model.Place.Field.ID, com.google.android.libraries.places.api.model.Place.Field.NAME));
+
+        autocompleteFragment.setPlaceFields(Arrays.asList(com.google.android.libraries.places.api.model.Place.Field.ID, com.google.android.libraries.places.api.model.Place.Field.NAME, com.google.android.libraries.places.api.model.Place.Field.LAT_LNG));
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                mMap.clear();
+                LatLng latLng = place.getLatLng();
+                //LinearLayoutStartTripDetails.setVisibility(View.VISIBLE);
+                //LinearLayoutActiveTrip.setVisibility(View.GONE);
+                //googleMap.addMarker(new MarkerOptions().position(sydney)
+                //        .title("Marker in Sydney"));
+                //googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+
+                //Marker marker = mMap.addMarker(new MarkerOptions()
+                //        .position(latLng)
+                //        .title(place.getName()));
+                //calculateDirections(marker);
+
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+
+            }
+        });
     }
 
     //first gets the location
@@ -248,7 +280,7 @@ private ImageView mGps;
         //mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGoogleApiClient, LAT_LNG_BOUNDS, null );
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this,Places.getGeoDataClient(this, null),LAT_LNG_BOUNDS,null);
         mSearchText.setAdapter(mPlaceAutocompleteAdapter);
-*/
+
                 // this is for searching location
         mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -263,6 +295,7 @@ private ImageView mGps;
                 return false;
             }
         });
+ */
         // this is used to re center the user when he clicks the button
         mGps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -283,6 +316,7 @@ private ImageView mGps;
 
 
     // this is the method used to find places
+    /*
     private void geoLocate(){
         Log.d(TAG,"GeoLocate: locating");
 
@@ -308,7 +342,7 @@ private ImageView mGps;
 
 
     }
-
+*/
 
 
     private void hideKeyboard(){

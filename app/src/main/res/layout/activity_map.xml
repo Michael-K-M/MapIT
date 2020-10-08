@@ -25,28 +25,12 @@
         android:background="@drawable/white_boarder"
         android:id="@+id/relLayout1">
 
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:id="@+id/ic_magnify"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/ic_magnify"
-            />
 
-        <AutoCompleteTextView
-            android:id="@+id/input_search"
+        <fragment
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/ic_magnify"
-            android:background="@null"
-            android:hint="Enter City or Address Here"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:lines="1"
-            android:textColor="#000"
-            android:textSize="15sp" />
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 
